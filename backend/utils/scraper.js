@@ -36,22 +36,24 @@ async function scrapeFlipkartProducts(url) {
   // }
 
   try {
-    const brower = await puppeteer.launch({
-      headless: true,
+    const browser = await puppeteer.launch({
+      headless: false,
       ignoreHTTPSErrors: true,
+      // args: ["--headless=new"],
     });
-    const page = await brower.newPage();
+    const page = await browser.newPage();
     // const proxy = `https://proxybot.io/api/v1/${process.env.PROXYBOT_API_KEY}?geolocation_code=in&url=`;
     // const proxyUrl = `${proxy}${encodeURIComponent(url.trim())}`;
 
     const proxyUrl = `https://api.scrape.do?token=${
       process.env.SCRAPEDO_API_KEY
-    }&url=${encodeURIComponent(url.trim())}`;
+    }&geoCode=in&url=${encodeURIComponent(url.trim())}`;
 
     console.log(proxyUrl);
     await page.goto(proxyUrl);
-    await page.waitForSelector("#container", {
-      waitUntil: "domcontentloaded",
+    await page.waitForSelector("#container > div", {
+      // waitUntil: "domcontentloaded",
+      timeout: 20_000,
     });
     let datas = await page.evaluate(() => {
       let elms = document.querySelectorAll("#container *");
@@ -108,11 +110,13 @@ async function scrapeFlipkartProducts(url) {
       };
     });
     console.log(datas);
+    // await browser.close();
+
     return datas;
   } catch (err) {
     console.log(err);
 
-    return "Something went wrong!";
+    return null;
   }
 }
 
