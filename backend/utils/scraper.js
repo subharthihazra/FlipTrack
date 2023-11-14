@@ -90,7 +90,11 @@ async function scrapeFlipkartProducts(url) {
           }
         }
 
-        if (elm?.innerHTML?.trim() == "Product Description") {
+        if (
+          elm?.innerHTML?.trim() == "Product Description" ||
+          elm?.innerHTML?.trim() == "Product Details" ||
+          elm?.innerHTML?.trim() == "Specifications"
+        ) {
           productDescriptionElms.push(elm?.parentNode?.parentNode);
         }
       });
