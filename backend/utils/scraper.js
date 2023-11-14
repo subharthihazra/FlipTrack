@@ -37,7 +37,7 @@ async function scrapeFlipkartProducts(url) {
 
   try {
     const browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
       ignoreHTTPSErrors: true,
       // args: ["--headless=new"],
     });
@@ -110,7 +110,7 @@ async function scrapeFlipkartProducts(url) {
       };
     });
     console.log(datas);
-    // await browser.close();
+    await browser.close();
 
     return datas;
   } catch (err) {

@@ -9,8 +9,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.post("/scrape", async (req, res) => {
-  //   console.log(req.body.url);
-  const data = await scrapeFlipkartProducts(req.body.url);
+  //   console.log(req.body.searchUrl);
+  const data = await scrapeFlipkartProducts(req.body.searchUrl);
   if (data) {
     res.status(201).send(data);
   } else {
