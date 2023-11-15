@@ -51,10 +51,17 @@ async function scrapeFlipkartProducts(url) {
 
     console.log(proxyUrl);
     await page.goto(proxyUrl);
-    await page.waitForSelector("#container > div", {
-      // waitUntil: "domcontentloaded",
-      timeout: 20_000,
-    });
+    // waitUntil: "domcontentloaded",
+    // waitUntil: "networkidle0",
+    // await page.waitForSelector("#container > div > div:nth-child(3)", {
+    await page.waitForXPath(
+      "//div[@id='container']/div/div[3]/div[1]/div[2]/div[2]/div/div[1]/h1",
+      {
+        // waitUntil: "networkidle2",
+        timeout: 20_000,
+        visible: true,
+      }
+    );
     let datas = await page.evaluate(() => {
       let elms = document.querySelectorAll("#container *");
       let priceElms = [];
@@ -84,10 +91,7 @@ async function scrapeFlipkartProducts(url) {
         }
 
         if (elm?.tagName?.toLowerCase() === "h1") {
-          let productNameSpan = elm.querySelector("span");
-          if (productNameSpan !== undefined) {
-            productNameElms.push(productNameSpan);
-          }
+          productNameElms.push(elm);
         }
 
         if (
@@ -114,7 +118,7 @@ async function scrapeFlipkartProducts(url) {
       };
     });
     console.log(datas);
-    await browser.close();
+    // await browser.close();
 
     return datas;
   } catch (err) {
