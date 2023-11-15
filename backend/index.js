@@ -8,7 +8,7 @@ const { scrapeFlipkartProducts } = require("./utils/scraper");
 
 app.use(
   cors({
-    origin: "https://fliptrack.vercel.app/",
+    origin: "https://fliptrack.vercel.app:3000/",
   })
 );
 
