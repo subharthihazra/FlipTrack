@@ -38,6 +38,7 @@ function App() {
       axios
         .post("https://fliptrack-backend.vercel.app/scrape", formData, {
           signal: controller.signal,
+          timeout: 1000 * 50,
         })
         .then((response) => {
           setStatus("ready");
