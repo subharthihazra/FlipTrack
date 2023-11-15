@@ -6,7 +6,11 @@ const app = express();
 
 const { scrapeFlipkartProducts } = require("./utils/scraper");
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://fliptrack.vercel.app/",
+  })
+);
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
