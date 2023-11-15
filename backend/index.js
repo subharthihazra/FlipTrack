@@ -23,8 +23,8 @@ const dummy_data = {
 
 app.post("/scrape", async (req, res) => {
   //   console.log(req.body.searchUrl);
-  data = dummy_data;
-  // const data = await scrapeFlipkartProducts(req.body.searchUrl || "");
+  // data = dummy_data;
+  const data = await scrapeFlipkartProducts(req.body.searchUrl || "");
 
   if (data) {
     res.status(201).send(data);
