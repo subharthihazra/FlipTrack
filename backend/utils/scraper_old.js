@@ -5,6 +5,36 @@ require("dotenv").config();
 const puppeteer = require("puppeteer");
 
 async function scrapeFlipkartProducts(url) {
+  // const username = String(process.env.BRIGHT_DATA_USERNAME);
+  // const password = String(process.env.BRIGHT_DATA_PASSWORD);
+  // const port = 22225;
+  // const sessionId = (1000000 * Math.random()) | 0;
+
+  // const options = {
+  //   auth: {
+  //     username: `${username}-session-${sessionId}`,
+  //     password,
+  //     host: "brd.superproxy.io",
+  //     port,
+  //     rejectUnauthorized: false,
+  //   },
+  // };
+
+  // try {
+  //   const response = await axios.get(url, options);
+  //   const $ = cheerio.load(response.data);
+  //   // console.log(response);
+
+  //   const priceElms = $("._30jeq3._16Jk6d");
+  //   const price = $("._30jeq3._16Jk6d").text().trim();
+
+  //   const fontSize = document.defaultView.getComputedStyle(priceElms);
+
+  //   return price;
+  // } catch (err) {
+  //   console.log(err);
+  // }
+
   try {
     const browser = await puppeteer.launch({
       headless: true,
@@ -12,6 +42,8 @@ async function scrapeFlipkartProducts(url) {
       // args: ["--headless=new"],
     });
     const page = await browser.newPage();
+    // const proxy = `https://proxybot.io/api/v1/${process.env.PROXYBOT_API_KEY}?geolocation_code=in&url=`;
+    // const proxyUrl = `${proxy}${encodeURIComponent(url.trim())}`;
 
     const proxyUrl = `https://api.scrape.do?token=${
       process.env.SCRAPEDO_API_KEY
@@ -19,13 +51,10 @@ async function scrapeFlipkartProducts(url) {
 
     console.log(proxyUrl);
     await page.goto(proxyUrl);
-    await page.waitForXPath(
-      "//div[@id='container']/div/div[3]/div[1]/div[2]/div[2]/div/div[1]/h1",
-      {
-        timeout: 20_000,
-        // visible: true,
-      }
-    );
+    await page.waitForSelector("#container > div", {
+      // waitUntil: "domcontentloaded",
+      timeout: 20_000,
+    });
     let datas = await page.evaluate(() => {
       let elms = document.querySelectorAll("#container *");
       let priceElms = [];
@@ -39,7 +68,6 @@ async function scrapeFlipkartProducts(url) {
         let toGetPrice = elmStyles.fontSize || "";
         let toGetPriceOriginal = elmStyles.textDecoration || "";
         let toGetImgUrl = elmStyles.cursor || "";
-        let toGetImgUrlElse = elmStyles.backgroundImage || "";
 
         if (toGetPrice.indexOf("28px") != -1) {
           priceElms.push(elm);
@@ -55,16 +83,11 @@ async function scrapeFlipkartProducts(url) {
           }
         }
 
-        if (
-          toGetImgUrlElse.indexOf(
-            "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMiIgaGVpZ2h0PSIyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+PHBhdGggZmlsbC1vcGFjaXR5PSIuMDUiIGZpbGw9IiNGRkYiIGQ9Ik0wIDBoMnYySDB6Ii8+PHBhdGggZD0iTTAgMGgxdjFIMHoiIGZpbGw9IiM4REFDREEiLz48L2c+PC9zdmc+"
-          ) != -1
-        ) {
-          imgElms.push(elm?.parentNode?.querySelector("img"));
-        }
-
         if (elm?.tagName?.toLowerCase() === "h1") {
-          productNameElms.push(elm);
+          let productNameSpan = elm.querySelector("span");
+          if (productNameSpan !== undefined) {
+            productNameElms.push(productNameSpan);
+          }
         }
 
         if (

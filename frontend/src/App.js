@@ -196,7 +196,7 @@ function DataView({ data }) {
 
 function consoleLog() {
   console.log(
-    `%cHey! 😀👋\nI'm Subharthi Hazra, doing B.Tech at CSE in Kolkata, India. 🏫 Currently in my second year. 🎓 I know stuff like Javascript, Node.JS, React.JS, HTML, CSS, C, C++, Git, Linux, and a bit of Python and Rust. 🚀 I'm eager to learn more and boost my skills. 💻\n\n\n\n%cContact me: %c👇\nhttps://linktr.ee/subharthihazra\n\n\n\n%cI'm open to any new opportunity! 🌟 `,
+    `%cHey! 😀👋\nI'm Subharthi Hazra, doing B.Tech at CSE in Kolkata, India. 🏫 Currently in my second year. 🎓 I know stuff like Javascript, Node.JS, React.JS, Typescript, HTML, CSS, C, C++, Git, Linux, and a bit of Python and Rust. 🚀 I'm eager to learn more and boost my skills. 💻\n\n\n\n%cContact me: %c👇\nhttps://linktr.ee/subharthihazra\n\n\n\n%cI'm open to any new opportunity! 🌟 `,
     "color:cadetblue; font-size: 16px",
     "color:black; font-size: 18px",
     "color:blue; font-size: 18px",
