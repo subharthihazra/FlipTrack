@@ -36,7 +36,7 @@ function App() {
       setStatus("loading");
       console.log("req");
       axios
-        .post("http://flip-track.vercel.app/scrape", formData, {
+        .post("http://fliptrack-backend.vercel.app/scrape", formData, {
           signal: controller.signal,
         })
         .then((response) => {
