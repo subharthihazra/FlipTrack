@@ -8,11 +8,11 @@ const chromium = require("chrome-aws-lambda");
 async function scrapeFlipkartProducts(url) {
   try {
     const browser = await chromium.puppeteer.launch({
-      // args: chromium.args,
-      // defaultViewport: chromium.defaultViewport,
-      // executablePath: await chromium.executablePath,
-      // headless: chromium.headless,
-      // ignoreHTTPSErrors: true,
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
+      ignoreHTTPSErrors: true,
     });
     const page = await browser.newPage();
 
