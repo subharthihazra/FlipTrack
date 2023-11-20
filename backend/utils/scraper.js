@@ -2,14 +2,17 @@ require("dotenv").config();
 
 // const cheerio = require("cheerio");
 // const axios = require("axios");
-const puppeteer = require("puppeteer");
+// const puppeteer = require("puppeteer-core");
+const chromium = require("chrome-aws-lambda");
 
 async function scrapeFlipkartProducts(url) {
   try {
-    const browser = await puppeteer.launch({
-      headless: true,
+    const browser = await chromium.puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
       ignoreHTTPSErrors: true,
-      // args: ["--headless=new"],
     });
     const page = await browser.newPage();
 

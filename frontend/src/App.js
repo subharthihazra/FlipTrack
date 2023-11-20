@@ -25,6 +25,7 @@ function App() {
   }
   function handleSearchUrl(event) {
     setFormData({ type: "UPDATE_SEARCH_URL", payLoad: event.target.value });
+    setStatus("loading");
   }
 
   useEffect(() => {
@@ -35,8 +36,9 @@ function App() {
       setStatus("loading");
       console.log("req");
       axios
-        .post("http://localhost:5000/scrape", formData, {
+        .post("https://fliptrack-backend.vercel.app/scrape", formData, {
           signal: controller.signal,
+          timeout: 1000 * 50,
         })
         .then((response) => {
           setStatus("ready");
@@ -44,7 +46,11 @@ function App() {
           console.log(response?.data);
         })
         .catch((error) => {
-          setStatus("error");
+          if (error?.name === "CanceledError") {
+            // setStatus("normal");
+          } else {
+            setStatus("error");
+          }
         });
     }
 
@@ -54,7 +60,7 @@ function App() {
   }, [formData]);
 
   return (
-    <div className="min-h-screen flex flex-col h-screen justify-between bg-slate-50">
+    <div className="min-h-screen flex flex-col justify-between bg-slate-100">
       <Headerbar />
       <div className="sm:w-2/3 lg:w-3/5 m-4 sm:mx-auto flex flex-col gap-6 sm:mb-auto">
         <form method="POST" onSubmit={handleSubmit}>
@@ -67,6 +73,7 @@ function App() {
               className="w-full py-4 px-5 shadow-lg border border-slate-200 rounded-lg 
               text-lg font-sans tracking-wide outline-0 hover:shadow-xl
                hover:border-slate-400 transition-all focus:border-slate-400"
+              spellcheck="false"
             />
           </div>
         </form>
@@ -181,9 +188,9 @@ function DataView({ data }) {
           />
         )}
       </div>
-      <div className="place-self-center">
-        <div className="text-2xl">{data?.price ? `₹${data?.price}` : "-"}</div>
-        <div className="text-lg line-through text-slate-500">
+      <div className="place-self-center text-center">
+        <div className="text-3xl">{data?.price ? `₹${data?.price}` : "-"}</div>
+        <div className="text-xl line-through text-slate-500">
           {data?.priceOriginal ? `₹${data?.priceOriginal}` : "-"}
         </div>
       </div>
